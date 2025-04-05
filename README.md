@@ -1,1 +1,155 @@
-# -dd
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로봇 퀴즈</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .option {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option:hover {
+      background: #d0d0d0;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="question" id="question">문제가 로딩 중...</div>
+    <div id="options"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "세계 최초의 로봇은 무엇인가요?",
+        options: ["ASIMO", "소피아", "유니메이트", "옵티머스"],
+        answer: "유니메이트"
+      },
+      {
+        question: "로봇의 3원칙을 제시한 사람은 누구인가요?",
+        options: ["아시모프", "다빈치", "일론 머스크", "알버트 아인슈타인"],
+        answer: "아시모프"
+      },
+      {
+        question: "산업용 로봇은 주로 어떤 작업에 사용되나요?",
+        options: ["청소", "요리", "용접 및 조립", "글쓰기"],
+        answer: "용접 및 조립"
+      },
+      {
+        question: "휴머노이드 로봇은 어떤 특징을 가지나요?",
+        options: ["동물처럼 걷는다", "인간과 비슷한 형태를 가진다", "하늘을 난다", "작은 곤충 크기이다"],
+        answer: "인간과 비슷한 형태를 가진다"
+      },
+      {
+        question: "로봇의 센서는 무엇을 감지하나요?",
+        options: ["감정", "에너지", "주변 환경 정보", "생각"],
+        answer: "주변 환경 정보"
+      },
+      {
+        question: "로봇청소기의 주요 작동 원리는 무엇인가요?",
+        options: ["감정 인식", "레이저 거리 측정", "사람 음성 인식", "자기부상"],
+        answer: "레이저 거리 측정"
+      },
+      {
+        question: "로봇팔이 가장 많이 사용되는 분야는 어디인가요?",
+        options: ["요리", "의료 수술", "공장 자동화", "농업"],
+        answer: "공장 자동화"
+      },
+      {
+        question: "로봇 소프트웨어를 개발할 때 주로 사용하는 언어는 무엇인가요?",
+        options: ["HTML", "C++", "Photoshop", "Excel"],
+        answer: "C++"
+      },
+      {
+        question: "로봇공학에서 'AI'는 무엇을 의미하나요?",
+        options: ["자동 인쇄", "인공지능", "항공 기술", "속도 조절"],
+        answer: "인공지능"
+      },
+      {
+        question: "로봇의 동작을 제어하는 장치를 무엇이라고 하나요?",
+        options: ["배터리", "센서", "컨트롤러", "액추에이터"],
+        answer: "컨트롤러"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").innerText = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.className = "option";
+        btn.onclick = () => selectAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(selected) {
+      const correct = quizData[currentQuestion].answer;
+      const resultDiv = document.getElementById("result");
+      if (selected === correct) {
+        resultDiv.innerText = "정답입니다!";
+        score++;
+      } else {
+        resultDiv.innerText = `오답입니다. 정답: ${correct}`;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        resultDiv.innerText = "";
+        if (currentQuestion < quizData.length) {
+          loadQuestion();
+        } else {
+          showFinalScore();
+        }
+      }, 1000);
+    }
+
+    function showFinalScore() {
+      document.getElementById("question").innerText = `퀴즈 완료! 당신의 점수: ${score} / ${quizData.length}`;
+      document.getElementById("options").innerHTML = "";
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
